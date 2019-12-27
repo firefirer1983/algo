@@ -6,7 +6,7 @@ import java.security.InvalidParameterException;
 public class DynamicArray<T> implements Iterable<T> {
   private int len = 0;
   private int capacity = 0;
-  private T[] ary;
+  private T[] ary = null;
 
   public DynamicArray(int capacity) {
     this.capacity = capacity;
@@ -42,9 +42,13 @@ public class DynamicArray<T> implements Iterable<T> {
       } else {
         capacity *= 2;
       }
-      T[] tmp = (T[]) new Object[capacity];
-      System.arraycopy(ary, 0, tmp, 0, len);
-      ary = tmp;
+      if(ary == null) {
+        ary = (T[]) new Object[capacity];
+      } else {
+        T[] tmp = (T[]) new Object[capacity];
+        System.arraycopy(ary, 0, tmp, 0, len);
+        ary = tmp;
+      }
     }
     ary[len] = elm;
     len += 1;
@@ -52,12 +56,8 @@ public class DynamicArray<T> implements Iterable<T> {
 
   public int indexOf(T elm) {
     for (int i = 0; i < len; i++) {
-      if (elm == null) {
-        if (ary[i] == null) {
+      if ((elm == null && ary[i] == null) || (elm !=null && elm.equals(ary[i]))){
           return i;
-        }
-      } else if (elm.equals(ary[i])) {
-        return i;
       }
     }
     return -1;
@@ -68,12 +68,12 @@ public class DynamicArray<T> implements Iterable<T> {
   }
 
   public T removeAt(int index) {
-    T ret = null;
+    T ret;
     if (index == len - 1) {
       ret = ary[index];
     } else if (index < len - 1) {
       ret = ary[index];
-      System.arraycopy(ary, index, ary, index + 1, len - index - 2);
+      System.arraycopy(ary, index + 1, ary, index, len - index - 1);
     } else {
       throw new InvalidParameterException("Out of array range");
     }
@@ -83,32 +83,21 @@ public class DynamicArray<T> implements Iterable<T> {
 
   public boolean remove(T elm) {
 
-    T ret = null;
-    boolean hit = false;
+    if(len == 0) {return false;}
+
     for (int i = 0; i < len - 1; i++) {
-      if (elm == null) {
-        if (ary[i] == null) {
-          ret = ary[i];
-          hit = true;
-        }
-      } else if (ary[i].equals(elm)) {
-        hit = true;
-        ret = ary[i];
-      }
-      if (hit) {
-        ary[i] = ary[i + 1];
+      if ((elm == null && ary[i] == null) || (elm != null && elm.equals(ary[i]))) {
+        System.arraycopy(ary, i+1, ary, i, len - i - 1);
+        len -= 1;
+        return true;
       }
     }
 
-    if (!hit && elm != null && elm.equals(ary[len - 1])) {
-      ret = ary[len - 1];
-    }
-
-    if (hit) {
-      ary[len - 1] = null;
+    if ((elm == null && ary[len - 1] == null) || (elm != null && elm.equals(ary[len - 1]))) {
       len -= 1;
+      return true;
     }
-    return hit;
+    return false;
   }
 
   public java.util.Iterator<T> iterator() {
@@ -130,5 +119,23 @@ public class DynamicArray<T> implements Iterable<T> {
         throw new UnsupportedOperationException();
       }
     };
+  }
+
+  @Override
+  public String toString() {
+    if (len == 0) {
+      return "[]";
+    }
+    StringBuilder sb = new StringBuilder(len).append("[");
+    for (int i = 0; i < len; i++) {
+      if (ary[i] != null) {
+        sb.append(ary[i].toString());
+        if (i != len - 1) {
+          sb.append(", ");
+        }
+      }
+    }
+    sb.append("]");
+    return sb.toString();
   }
 }

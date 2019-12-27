@@ -133,17 +133,24 @@ public class DoublyLinkedList<T> implements Iterable<T> {
 
   // Remove a node at a particular index, O(n)
   public T removeAt(int index) {
-//    if(index >= size) {
-//      throw new RuntimeException("index out of range");
-//    }
     if(isEmpty()) {
       throw new RuntimeException("empty list");
     }
-    Node<T> trav = head;
-    for(int i=0; i!=index; i++) {
-      trav = trav.next;
+    if(index == 0){
+      return removeFirst();
+    } else if (index == size -1) {
+      return removeLast();
+    } else {
+      Node<T> trav = head;
+      for(int i=0; i!=index; i++) {
+        trav = trav.next;
+      }
+      T data = trav.data;
+      trav.data = null;
+      trav.prev.next = trav.next;
+      trav.next.prev = trav.prev;
+      return data;
     }
-    return null;
   }
 
   // Remove a particular value in the linked list, O(n)

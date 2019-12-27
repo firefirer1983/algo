@@ -33,10 +33,9 @@ public class DoublyLinkedList<T> implements Iterable<T> {
     }
   }
 
-
   // Empty this linked list, O(n)
   public void clear() {
-    if(!this.isEmpty()) {
+    if (!this.isEmpty()) {
       while (head.next != null) {
         head.data = null;
         head = head.next;
@@ -77,11 +76,11 @@ public class DoublyLinkedList<T> implements Iterable<T> {
 
   // Add an element at a specified index
   public void addAt(int index, T data) throws Exception {
-    if(index >= size) {
+    if (index >= size) {
       throw new RuntimeException("index out of range");
     }
     Node<T> trav = head;
-    for(int i=0; i != index; i++) {
+    for (int i = 0; i != index; i++) {
       trav = trav.next;
     }
 
@@ -133,16 +132,16 @@ public class DoublyLinkedList<T> implements Iterable<T> {
 
   // Remove a node at a particular index, O(n)
   public T removeAt(int index) {
-    if(isEmpty()) {
+    if (isEmpty()) {
       throw new RuntimeException("empty list");
     }
-    if(index == 0){
+    if (index == 0) {
       return removeFirst();
-    } else if (index == size -1) {
+    } else if (index == size - 1) {
       return removeLast();
     } else {
       Node<T> trav = head;
-      for(int i=0; i!=index; i++) {
+      for (int i = 0; i != index; i++) {
         trav = trav.next;
       }
       T data = trav.data;
@@ -155,13 +154,35 @@ public class DoublyLinkedList<T> implements Iterable<T> {
 
   // Remove a particular value in the linked list, O(n)
   public boolean remove(Object obj) {
+    Node<T> trav = head;
+    while (trav != null) {
+      if ((trav.data == null && obj == null) || (trav.data != null && trav.data.equals(obj))) {
+        if (trav == head) {
+          removeFirst();
+        } else if (trav == tail) {
+          removeLast();
+        } else {
+          trav.prev.next = trav.next;
+          trav.next.prev = trav.prev;
+        }
+        return true;
+      }
+      trav = trav.next;
+    }
     return false;
   }
 
   // Find the index of a particular value in the linked list, O(n)
   public int indexOf(Object obj) {
-    int index = 0;
-
+    if (isEmpty()) {
+      throw new RuntimeException("Empty list!");
+    }
+    Node<T> trav = head;
+    for (int i = 0; i < size; i++) {
+      if ((trav.data == null && obj == null) || (trav.data != null && trav.data.equals(obj))) {
+        return i;
+      }
+    }
     return -1;
   }
 
@@ -172,10 +193,44 @@ public class DoublyLinkedList<T> implements Iterable<T> {
 
   @Override
   public java.util.Iterator<T> iterator() {
+    return new java.util.Iterator<T>() {
+      Node<T> trav = head;
+      @Override
+      public boolean hasNext() {
+        return trav != tail;
+      }
+
+      @Override
+      public T next() {
+        trav = trav.next;
+        return trav.data;
+      }
+
+      @Override
+      public void remove() {
+        throw new UnsupportedOperationException();
+      }
+    };
   }
 
   @Override
   public String toString() {
+    if (isEmpty()) {
+      return "[]";
+    }
     StringBuilder sb = new StringBuilder();
+    Node<T> trav = head;
+    sb.append("[");
+    while (true) {
+      sb.append(trav.data.toString());
+      if (trav.next == null) {
+        break;
+      } else {
+        sb.append(", ");
+        trav = trav.next;
+      }
+    }
+    sb.append("]");
+    return sb.toString();
   }
 }

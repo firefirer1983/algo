@@ -308,11 +308,7 @@ public class LinkedListTest {
         java.util.Iterator<Integer> iter1 = javaLinkedList.iterator();
         java.util.Iterator<Integer> iter2 = list.iterator();
         while (iter1.hasNext()) {
-          int l1 = iter1.next();
-          int l2 = iter2.next();
-          System.out.println(l1);
-          System.out.println(l2);
-          assertEquals(l1, l2);
+          assertEquals(iter1.next(), iter2.next());
         }
       }
     }

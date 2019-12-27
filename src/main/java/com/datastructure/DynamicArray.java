@@ -36,12 +36,15 @@ public class DynamicArray<T> implements Iterable<T> {
   }
 
   public void add(T elm) {
+//    1. 如果当前capacity为0,那么需要先设为1
     if (len >= capacity) {
       if (capacity == 0) {
         capacity = 1;
       } else {
         capacity *= 2;
       }
+//    2. new 则需要先分配空间后再进行赋值新元素
+
       if(ary == null) {
         ary = (T[]) new Object[capacity];
       } else {
@@ -55,6 +58,8 @@ public class DynamicArray<T> implements Iterable<T> {
   }
 
   public int indexOf(T elm) {
+//    判断要找的元素是否为null,如果为null则找同样为null.
+//    如果不为null就找相等
     for (int i = 0; i < len; i++) {
       if ((elm == null && ary[i] == null) || (elm !=null && elm.equals(ary[i]))){
           return i;

@@ -301,13 +301,19 @@ public class LinkedListTest {
         Integer elem = randNums.get(i);
         Integer index1 = javaLinkedList.indexOf(elem);
         Integer index2 = list.indexOf(elem);
-
+        String t = list.toString();
         assertEquals(index1, index2);
         assertEquals(javaLinkedList.size(), list.size());
 
         java.util.Iterator<Integer> iter1 = javaLinkedList.iterator();
         java.util.Iterator<Integer> iter2 = list.iterator();
-        while (iter1.hasNext()) assertEquals(iter1.next(), iter2.next());
+        while (iter1.hasNext()) {
+          int l1 = iter1.next();
+          int l2 = iter2.next();
+          System.out.println(l1);
+          System.out.println(l2);
+          assertEquals(l1, l2);
+        }
       }
     }
   }

@@ -5,6 +5,11 @@
  */
 package com.datastructure;
 
+
+//要注意只有一个节点的情况:
+//如果只有一个节点，那么head == tail , head.prev == head.next == tail.prev == tail.next == null
+// 当只有一个节点的时候，如果要删除，则只需要将当前head.data设为null即可。
+
 public class DoublyLinkedList<T> implements Iterable<T> {
   private int size;
   private Node<T> head;

@@ -5,7 +5,7 @@ import java.util.LinkedList;
 
 public class Queue<T> implements Iterable<T> {
 
-  private java.util.LinkedList<T> queue = new java.util.LinkedList<T>();
+  private LinkedList<T> queue = new LinkedList<T>();
 
   public Queue() {}
 
